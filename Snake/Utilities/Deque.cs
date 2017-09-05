@@ -124,14 +124,7 @@ namespace Snake.Utilities
 
         public bool MoveNext()
         {
-            if (_currentNode == null)
-            {
-                _currentNode = _head;
-            }
-            else
-            {
-                _currentNode = _currentNode.Next;
-            }
+            _currentNode = _currentNode == null ? _head : _currentNode.Next;
             return (_currentNode != null);
         }
 

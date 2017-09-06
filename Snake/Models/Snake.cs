@@ -52,7 +52,7 @@ namespace Snake.Models
                 throw new ArgumentOutOfRangeException(nameof(lenght), lenght, "Length cannot be less than 1.");
             }
             
-            for (var i = x - lenght / 2; i < x + lenght / 2; i++)
+            for (var i = x - (lenght + 1) / 2; i < x + lenght / 2; i++)
             {
                 _points.PushFront(new Point{ X = i, Y = y });
             }
@@ -62,7 +62,7 @@ namespace Snake.Models
         {
             foreach (var point in _points)
             {
-                Console.SetCursorPosition(point.X, point.Y);
+                Console.SetCursorPosition(Constants.Margin + point.X, Constants.Margin + point.Y);
                 Console.Write('S');
             }
         }
@@ -70,7 +70,7 @@ namespace Snake.Models
         public void Move()
         {
             var prevTail = _points.PopBack();
-            Console.SetCursorPosition(prevTail.X, prevTail.Y);
+            Console.SetCursorPosition(Constants.Margin + prevTail.X, Constants.Margin + prevTail.Y);
             Console.Write(' ');
 
             var newHead = _points.PeekFront();
@@ -93,7 +93,7 @@ namespace Snake.Models
                     throw new InvalidOperationException();
             }
             
-            Console.SetCursorPosition(newHead.X, newHead.Y);
+            Console.SetCursorPosition(Constants.Margin + newHead.X, Constants.Margin + newHead.Y);
             Console.Write('S');
             
             _points.PushFront(newHead);

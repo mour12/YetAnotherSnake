@@ -11,13 +11,13 @@ namespace Snake.Models
         public int X
         {
             get => _x;
-            set => _x = (Constants.WindowWidth + value) % Constants.WindowWidth;
+            set => _x = (Constants.PlaygroundWidth + value) % Constants.PlaygroundWidth;
         }
 
         public int Y
         {
             get => _y;
-            set => _y = (Constants.WindowHeight + value) % Constants.WindowHeight;
+            set => _y = (Constants.PlaygroundHeight + value) % Constants.PlaygroundHeight;
         }
     }
 }

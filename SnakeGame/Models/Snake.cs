@@ -1,10 +1,12 @@
 ﻿using System;
-using Snake.Utilities;
+using System.Linq;
+using SnakeGame.Utilities;
 
-namespace Snake.Models
+namespace SnakeGame.Models
 {
-    internal sealed class Snake : IMovable
+    internal sealed class Snake
     {
+        private int _value;
         private Direction _direction = Direction.Right;
         private readonly Deque<Point> _points = new Deque<Point>();
 
@@ -54,7 +56,7 @@ namespace Snake.Models
             
             for (var i = x - (lenght + 1) / 2; i < x + lenght / 2; i++)
             {
-                _points.PushFront(new Point{ X = i, Y = y });
+                _points.PushFront(new Point(i, y, 'S'));
             }
         }
 
@@ -62,41 +64,63 @@ namespace Snake.Models
         {
             foreach (var point in _points)
             {
-                Console.SetCursorPosition(Constants.Margin + point.X, Constants.Margin + point.Y);
-                Console.Write('S');
+                point.Draw();
             }
         }
         
         public void Move()
         {
-            var prevTail = _points.PopBack();
-            Console.SetCursorPosition(Constants.Margin + prevTail.X, Constants.Margin + prevTail.Y);
-            Console.Write(' ');
+            if (_value > 0)
+            {
+                --_value;
+            }
+            else
+            {
+                var prevTail = _points.PopBack();
+                prevTail.Erase();
+            }
 
-            var newHead = _points.PeekFront();
+            var oldHead = _points.PeekFront();
+            Point newHead;
 
             switch (Direction)
             {
                 case Direction.Up:
-                    newHead.Y--;
+                    newHead = new Point(oldHead.X, (oldHead.Y + Constants.PlaygroundHeight - 1) % Constants.PlaygroundHeight, 'S');
                     break;
                 case Direction.Down:
-                    newHead.Y++;
+                    newHead = new Point(oldHead.X, (oldHead.Y + 1) % Constants.PlaygroundHeight, 'S');
                     break;
                 case Direction.Left:
-                    newHead.X--;
+                    newHead = new Point((oldHead.X + Constants.PlaygroundWidth - 1) % Constants.PlaygroundWidth, oldHead.Y, 'S');
                     break;
                 case Direction.Right:
-                    newHead.X++;
+                    newHead = new Point((oldHead.X + 1) % Constants.PlaygroundWidth, oldHead.Y, 'S');
                     break;
                 default:
                     throw new InvalidOperationException();
             }
             
-            Console.SetCursorPosition(Constants.Margin + newHead.X, Constants.Margin + newHead.Y);
-            Console.Write('S');
+            newHead.Draw();
             
             _points.PushFront(newHead);
+        }
+
+        public bool IsIntersecting(Point other)
+        {
+            return _points.Any(point => point == other);
+        }
+
+        public bool CanEat(Food food)
+        {
+            var head = _points.PeekFront();
+
+            return head == food.Position;
+        }
+
+        public void AddValue(int value)
+        {
+            _value += value;
         }
     }
 }

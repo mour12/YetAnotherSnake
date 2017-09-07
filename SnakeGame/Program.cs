@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
-using Snake.Models;
-using Snake.Utilities;
+using SnakeGame.Models;
 
-namespace Snake
+namespace SnakeGame
 {
     internal class Program
     {
-        private static readonly List<IMovable> Objects = new List<IMovable>();
+        private static Random _rand = new Random();
+        private static Snake _snake = new Snake(Constants.PlaygroundWidth / 2, Constants.PlaygroundHeight / 2);
+        private static Food? _food = null;
         
         public static void Main(string[] args)
         {
@@ -19,13 +19,17 @@ namespace Snake
             Console.BufferHeight = Constants.PlaygroundHeight + 2 * Constants.Margin;
             
             InitializeWorld();
-
-            var snake = new Models.Snake(Constants.PlaygroundWidth / 2, Constants.PlaygroundHeight / 2);
-            snake.Initialize();
-            Objects.Add(snake);
+            
+            _snake.Initialize();
 
             while (true)
             {
+                if (!_food.HasValue)
+                {
+                    _food = GenerateFood();
+                    _food.Value.Position.Draw();
+                }
+                
                 if (Console.KeyAvailable)
                 {
                     ConsoleKeyInfo input;
@@ -38,22 +42,28 @@ namespace Snake
                     switch (input.Key)
                     {
                         case ConsoleKey.LeftArrow:
-                            snake.Direction = Direction.Left;
+                            _snake.Direction = Direction.Left;
                             break;
                         case ConsoleKey.RightArrow:
-                            snake.Direction = Direction.Right;
+                            _snake.Direction = Direction.Right;
                             break;
                         case ConsoleKey.UpArrow:
-                            snake.Direction = Direction.Up;
+                            _snake.Direction = Direction.Up;
                             break;
                         case ConsoleKey.DownArrow:
-                            snake.Direction = Direction.Down;
+                            _snake.Direction = Direction.Down;
                             break;
                     }
                 }
+
+                if (_snake.CanEat(_food.Value))
+                {
+                    _snake.AddValue(_food.Value.Value);
+                    _food = null;
+                }
                 
-                Update();
-                Thread.Sleep(1000);
+                _snake.Move();
+                Thread.Sleep(50);
             }
         }
 
@@ -72,12 +82,17 @@ namespace Snake
             Console.Write(new String('#', Constants.PlaygroundWidth + 2));
         }
 
-        private static void Update()
+        private static Food GenerateFood()
         {
-            foreach (var item in Objects)
+            Point position;
+            do
             {
-                item.Move();
-            }
+                int x = _rand.Next(Constants.PlaygroundWidth);
+                int y = _rand.Next(Constants.PlaygroundHeight);
+                position = new Point(x, y, '@');
+            } while (_snake.IsIntersecting(position));
+            
+            return new Food(position, Constants.FoodValue);
         }
     }
 }

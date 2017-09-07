@@ -8,8 +8,8 @@
     <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Snake</RootNamespace>
-    <AssemblyName>Snake</AssemblyName>
+    <RootNamespace>SnakeGame</RootNamespace>
+    <AssemblyName>SnakeGame</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -43,12 +43,12 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Models\Direction.cs" />
+    <Compile Include="Models\Food.cs" />
     <Compile Include="Models\Point.cs" />
     <Compile Include="Models\Snake.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Deque.cs" />
-    <Compile Include="Utilities\IMovable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

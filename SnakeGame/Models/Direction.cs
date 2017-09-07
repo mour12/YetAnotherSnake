@@ -1,4 +1,4 @@
-﻿namespace Snake.Models
+﻿namespace SnakeGame.Models
 {
     internal enum Direction
     {

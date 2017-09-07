@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Snake.Utilities
+namespace SnakeGame.Utilities
 {
     internal sealed class Deque<T> : IEnumerable<T>, IEnumerator<T>
     {

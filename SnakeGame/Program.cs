@@ -63,6 +63,22 @@ namespace SnakeGame
                 }
                 
                 _snake.Move();
+
+                if (_snake.IsIntersectingItself())
+                {
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Game over!");
+
+                    ConsoleKeyInfo key;
+                    do
+                    {
+                        key = Console.ReadKey(false);
+                    } while (key.Key != ConsoleKey.Enter);
+
+                    return;
+                }
+
                 Thread.Sleep(50);
             }
         }
@@ -71,7 +87,7 @@ namespace SnakeGame
         {
             Console.SetCursorPosition(Constants.Margin - 1, Constants.Margin - 1);
             Console.Write(new String('#', Constants.PlaygroundWidth + 2));
-            for (var i = 0; i < Constants.PlaygroundHeight; i++)
+            for (int i = 0; i < Constants.PlaygroundHeight; i++)
             {
                 Console.SetCursorPosition(Constants.Margin - 1, Constants.Margin  + i);
                 Console.Write('#');
@@ -84,15 +100,18 @@ namespace SnakeGame
 
         private static Food GenerateFood()
         {
+            int foodValue = _rand.Next(Constants.MaxFoodValue) + 1;
+            char foodSymbol = foodValue.ToString()[0];
+
             Point position;
             do
             {
                 int x = _rand.Next(Constants.PlaygroundWidth);
                 int y = _rand.Next(Constants.PlaygroundHeight);
-                position = new Point(x, y, '@');
+                position = new Point(x, y, foodSymbol);
             } while (_snake.IsIntersecting(position));
-            
-            return new Food(position, Constants.FoodValue);
+
+            return new Food(position, foodValue);
         }
     }
 }

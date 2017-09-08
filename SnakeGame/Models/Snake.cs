@@ -54,7 +54,7 @@ namespace SnakeGame.Models
                 throw new ArgumentOutOfRangeException(nameof(lenght), lenght, "Length cannot be less than 1.");
             }
             
-            for (var i = x - (lenght + 1) / 2; i < x + lenght / 2; i++)
+            for (int i = x - (lenght + 1) / 2; i < x + lenght / 2; i++)
             {
                 _points.PushFront(new Point(i, y, 'S'));
             }
@@ -109,6 +109,13 @@ namespace SnakeGame.Models
         public bool IsIntersecting(Point other)
         {
             return _points.Any(point => point == other);
+        }
+
+        public bool IsIntersectingItself()
+        {
+            var head = _points.PeekFront();
+
+            return _points.Count(point => point == head) > 1;
         }
 
         public bool CanEat(Food food)

@@ -9,6 +9,7 @@ namespace SnakeGame
         private static Random _rand = new Random();
         private static Snake _snake = new Snake(Constants.PlaygroundWidth / 2, Constants.PlaygroundHeight / 2);
         private static Food? _food = null;
+        private static int _score = 0;
         
         public static void Main(string[] args)
         {
@@ -24,6 +25,9 @@ namespace SnakeGame
 
             while (true)
             {
+                Console.SetCursorPosition(0, 0);
+                Console.Write($"Score: {_score}");
+
                 if (!_food.HasValue)
                 {
                     _food = GenerateFood();
@@ -59,6 +63,7 @@ namespace SnakeGame
                 if (_snake.CanEat(_food.Value))
                 {
                     _snake.AddValue(_food.Value.Value);
+                    _score += _food.Value.Value;
                     _food = null;
                 }
                 
@@ -69,6 +74,8 @@ namespace SnakeGame
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Game over!");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"Your score is {_score}");
 
                     ConsoleKeyInfo key;
                     do
